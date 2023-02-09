@@ -1,3 +1,0 @@
-/Users/brennanbertola/School/CS455RayTracer/RayTracer/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/Users/brennanbertola/School/CS455RayTracer/RayTracer/cmake-build-debug/CMakeFiles/edit_cache.dir
-/Users/brennanbertola/School/CS455RayTracer/RayTracer/cmake-build-debug/CMakeFiles/RayTracer.dir
