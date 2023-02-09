@@ -1,7 +1,7 @@
 #include <iostream>
+#include "RayTracer.h"
 
 int main() {
-
     // Image
 
     const int image_width = 256;
