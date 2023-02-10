@@ -13,12 +13,13 @@ protected:
     vec3 Os;
     float kgls;
 public:
+    Object() {}
+
     Object(const vec3 &ks, const vec3 &kd, const vec3 &ka, const vec3 &od, const vec3 &os, float kgls) : Ks(ks), Kd(kd),
                                                                                                          Ka(ka), Od(od),
                                                                                                          Os(os),
                                                                                                          kgls(kgls) {}
 
-    virtual void getIntersection() = 0;
 
     const vec3 &getKs() const {
         return Ks;

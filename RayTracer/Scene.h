@@ -22,7 +22,7 @@ public:
     void setCam(const Camera &cam) {
         Scene::cam = cam;
     }
-    void addObj(const Object &obj) {
+    void addObj(Object obj) {
         objs.push_back(obj);
     }
     void addLight(const Light &light) {
