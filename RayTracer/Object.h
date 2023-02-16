@@ -2,35 +2,51 @@
 #define RAYTRACER_OBJECT_H
 
 #include "vec3.h"
+#include "Ray.h"
 using namespace std;
+
+class IResult {
+public:
+    bool found;
+    vec3 point;
+    vec3 color;
+
+    IResult(bool found) : found(found) {}
+    IResult(bool found, const vec3 &point, const vec3 &color) : found(found), point(point), color(color) {}
+};
 
 class  Object {
 protected:
-    vec3 Ks;
-    vec3 Kd;
-    vec3 Ka;
+    float Ks;
+    float Kd;
+    float Ka;
     vec3 Od;
     vec3 Os;
     float kgls;
+
 public:
-    Object() {}
+    Object(float kd, float ks, float ka, const vec3 &od, const vec3 &os, float kgls) : Ks(ks), Kd(kd), Ka(ka),
+                                                                                       kgls(kgls), Od(od), Os(os) {}
 
-    Object(const vec3 &ks, const vec3 &kd, const vec3 &ka, const vec3 &od, const vec3 &os, float kgls) : Ks(ks), Kd(kd),
-                                                                                                         Ka(ka), Od(od),
-                                                                                                         Os(os),
-                                                                                                         kgls(kgls) {}
+    virtual ~Object() {}
+
+    virtual IResult checkForIntersect(Ray ray) = 0;
 
 
-    const vec3 &getKs() const {
+    float getKs() const {
         return Ks;
     }
 
-    const vec3 &getKd() const {
+    float getKd() const {
         return Kd;
     }
 
-    const vec3 &getKa() const {
+    float getKa() const {
         return Ka;
+    }
+
+    float getKgls() const {
+        return kgls;
     }
 
     const vec3 &getOd() const {
@@ -39,10 +55,6 @@ public:
 
     const vec3 &getOs() const {
         return Os;
-    }
-
-    float getkgls() const {
-        return kgls;
     }
 };
 #endif //RAYTRACER_OBJECT_H

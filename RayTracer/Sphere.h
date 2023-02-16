@@ -3,14 +3,15 @@
 
 #include "Object.h"
 
-class Sphere: protected Object {
+class Sphere: public Object {
 private:
     float radius;
     vec3 center;
 public:
-    Sphere(const vec3 &ks, const vec3 &kd, const vec3 &ka, const vec3 &od, const vec3 &os, float kgls, float radius,
-           const vec3 &center) : Object(ks, kd, ka, od, os, kgls), radius(radius), center(center) {}
+    Sphere( const vec3 &center, float radius, float kd, float ks, float ka, const vec3 &od, const vec3 &os, float kgls)
+            : Object(kd, ks, ka, od, os, kgls), radius(radius), center(center) {}
 
+    IResult checkForIntersect(Ray r);
 
     float getRadius() const {
         return radius;

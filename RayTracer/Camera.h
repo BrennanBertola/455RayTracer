@@ -2,6 +2,7 @@
 #define RAYTRACER_CAMERA_H
 
 #include "vec3.h"
+#include <math.h>
 using namespace std;
 
 class Camera{
@@ -22,7 +23,8 @@ public:
 
         float focalLength = sqrt(pow(lookAt.x() - lookFrom.x(), 2) + pow(lookAt.y()-lookFrom.y(),2) +
                             pow(lookAt.z() - lookFrom.z(), 2));
-        float length = tan(fov/2) * focalLength;
+
+        float length = tan((fov * (M_PI / 360))) * focalLength;
         max = {length, length};
         length *= -1;
         min = {length, length};
