@@ -8,12 +8,31 @@ private:
     vec3 lookAt;
     vec3 lookFrom;
     vec3 lookUp;
-    float fov;
+    float focalLength;
+    float viewHeight;
+    float viewWidth;
 public:
     Camera() {}
-    Camera(const vec3 &lookAt, const vec3 &lookFrom, const vec3 &lookUp, float fov) : lookAt(lookAt),
-                                                                                      lookFrom(lookFrom),
-                                                                                      lookUp(lookUp), fov(fov) {}
+
+    Camera(const vec3 &lookAt, const vec3 &lookFrom, const vec3 &lookUp, float focalLength, float viewHeight, float viewWidth)
+            : lookAt(lookAt), lookFrom(lookFrom), lookUp(lookUp), focalLength(focalLength), viewHeight(viewHeight),
+              viewWidth(viewWidth) {}
+
+    float getViewHeight() const {
+        return viewHeight;
+    }
+
+    void setViewHeight(float viewHeight) {
+        Camera::viewHeight = viewHeight;
+    }
+
+    float getViewWidth() const {
+        return viewWidth;
+    }
+
+    void setViewWidth(float viewWidth) {
+        Camera::viewWidth = viewWidth;
+    }
 
     const vec3 &getLookAt() const {
         return lookAt;
@@ -27,8 +46,8 @@ public:
         return lookUp;
     }
 
-    float getFov() const {
-        return fov;
+    float getFocalLength() const {
+        return focalLength;
     }
 };
 

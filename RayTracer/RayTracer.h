@@ -3,6 +3,7 @@
 #include "Scene.h"
 #include "Ray.h"
 
+//more for project 6
 class RayTracer {
 private:
     Scene scene;
