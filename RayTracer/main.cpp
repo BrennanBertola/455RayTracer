@@ -18,7 +18,7 @@ bool hit_sphere(const vec3& center, double radius, const Ray& r) {
 }
 
 vec3 ray_color(const Ray& r) {
-    if (hit_sphere(vec3(0,0,-1), 0.5, r))
+    if (hit_sphere(vec3(.25,0,0), .5, r))
         return vec3(1, 0, 0);
     vec3 unit_direction = unit_vector(r.getDir());
     auto t = 0.5*(unit_direction.y() + 1.0);
@@ -28,20 +28,13 @@ vec3 ray_color(const Ray& r) {
 int main() {
 
     // Image
-    const auto aspect_ratio = 16.0 / 9.0;
+    const auto aspect_ratio = 1;
     const int image_width = 400;
     const int image_height = static_cast<int>(image_width / aspect_ratio);
 
-    // Camera
-
-    auto viewport_height = 2.0;
-    auto viewport_width = aspect_ratio * viewport_height;
-    auto focal_length = 1.0;
-
-    auto origin = vec3(0, 0, 0);
-    auto horizontal = vec3(viewport_width, 0, 0);
-    auto vertical = vec3(0, viewport_height, 0);
-    auto lower_left_corner = origin - horizontal/2 - vertical/2 - vec3(0, 0, focal_length);
+    Camera cam (vec3(0,0,0), vec3(0,0,1), vec3(0,1,0), 90);
+    auto horizontal = vec3(cam.max.first, 0, 0);
+    auto vertical = vec3(0, cam.max.second, 0);
 
     // Render
 
@@ -50,9 +43,9 @@ int main() {
     for (int j = image_height-1; j >= 0; --j) {
         std::cerr << "\rScanlines remaining: " << j << ' ' << std::flush;
         for (int i = 0; i < image_width; ++i) {
-            auto u = double(i) / (image_width-1);
-            auto v = double(j) / (image_height-1);
-            Ray r(origin, lower_left_corner + u*horizontal + v*vertical - origin);
+            float u = double(i) * ((cam.max.first - cam.min.first)/(image_width)) + cam.min.first;
+            float v = double(j) * ((cam.max.second - cam.min.second)/(image_width)) + cam.min.second;
+            Ray r(cam.getLookFrom(),  u*horizontal + v*vertical - cam.getLookFrom());
             vec3 pixel_color = ray_color(r);
             write_color(std::cout, pixel_color);
         }
