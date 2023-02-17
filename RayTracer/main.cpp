@@ -1,68 +1,60 @@
 #include <iostream>
 #include "RayTracer.h"
 
-//void write_color(std::ostream &out, vec3 pixel_color) {
-//    // Write the translated [0,255] value of each color component.
-//    out << static_cast<int>(255.999 * pixel_color.x()) << ' '
-//        << static_cast<int>(255.999 * pixel_color.y()) << ' '
-//        << static_cast<int>(255.999 * pixel_color.z()) << '\n';
-//}
-//
-//bool hit_sphere(const vec3& center, double radius, const Ray& r) {
-//    vec3 oc = r.getOri() - center;
-//    auto a = dot(r.getDir(), r.getDir());
-//    auto b = 2.0 * dot(oc, r.getDir());
-//    auto c = dot(oc, oc) - radius*radius;
-//    auto discriminant = b*b - 4*a*c;
-//    return (discriminant > 0);
-//}
-//
-//vec3 ray_color(const Ray& r) {
-//    if (hit_sphere(vec3(0,0,0), .5, r))
-//        return vec3(1, 0, 0);
-//    vec3 unit_direction = unit_vector(r.getDir());
-//    auto t = 0.5*(unit_direction.y() + 1.0);
-//    return (1.0-t)*vec3(1.0, 1.0, 1.0) + t*vec3(0.5, 0.7, 1.0);
-//}
-
 int main() {
 
     // Image
     const int image_width = 500;
     const int image_height = 500;
 
-    Scene* scene = new Scene (vec3(.2,.2,.2), vec3(0,0,0));
+    Scene* scene = new Scene (vec3(.2,.2,.2), vec3(0,0,0), "1");
 
-    Camera cam (vec3(0,0,0), vec3(0,0,1), vec3(0,1,0), 90);
+    //A fov 60 fit the examples better, that's why I'm using it over 90.
+    Camera cam (vec3(0,0,0), vec3(0,0,1), vec3(0,1,0), 60);
     scene->setCam(cam);
 
     Light light(vec3(0,1,0), vec3(1,1,1));
-    scene->addLight(light);
+    scene->setLight(light);
 
-    Sphere* sphere = new Sphere (vec3(0,0,0), .4, .7, .2, .1, vec3(1,0,1), vec3(1,1,1), 16.0);
+    Sphere* sphere = new Sphere (vec3(0,0,0), .4, .7, .2, .1, vec3(1,0,1), vec3(1,1,1), 16);
     scene->addObj(sphere);
 
     RayTracer tracer;
     tracer.traceScene(image_width, image_height, scene);
+    delete scene;
 
+    scene = new Scene (vec3(.2,.2,.2), vec3(.1,0.1,0.1), "2");
+    scene->setCam(cam);
 
-    // Render
+    light = Light(vec3(1,1,1), vec3(1,1,1));
+    scene->setLight(light);
 
-//    auto horizontal = vec3(cam.max.first, 0, 0);
-//    auto vertical = vec3(0, cam.max.second, 0);
-//
-//    std::cout << "P3\n" << image_width << " " << image_height << "\n255\n";
-//
-//    for (int j = image_height-1; j >= 0; --j) {
-//        std::cerr << "\rScanlines remaining: " << j << ' ' << std::flush;
-//        for (int i = 0; i < image_width; ++i) {
-//            float u = double(i) * ((cam.max.first - cam.min.first)/(image_width)) + cam.min.first;
-//            float v = double(j) * ((cam.max.second - cam.min.second)/(image_width)) + cam.min.second;
-//            Ray r(cam.getLookFrom(),  u*horizontal + v*vertical - cam.getLookFrom());
-//            vec3 pixel_color = ray_color(r);
-//            write_color(std::cout, pixel_color);
-//        }
-//    }
-//
-//    std::cerr << "\nDone.\n";
+    sphere = new Sphere(vec3(.45, 0, -0.15), .15, .8, .1, .1, vec3(1,1,1), vec3(1,1,1), 4);
+    scene->addObj(sphere);
+    sphere = new Sphere(vec3(0,0,-0.1), .2, .6, .3, .1, vec3(1,0,0), vec3(1,1,1), 32);
+    scene->addObj(sphere);
+    sphere = new Sphere(vec3(-0.6,0,0), .3, .6, .2, .1, vec3(0,1,0), vec3(.5,1,.5), 64);
+    scene->addObj(sphere);
+    sphere = new Sphere(vec3(0, -10000.5, 0), 10000, .9, 0, .1, vec3(0,0,1), vec3(1,1,1), 16);
+    scene->addObj(sphere);
+
+    tracer.traceScene(image_width, image_height, scene);
+    delete scene;
+
+    scene = new Scene (vec3(.2,.2,.2), vec3(.1,0.1,0.1), "3");
+    scene->setCam(cam);
+
+    light = Light(vec3(0,1,1), vec3(1,1,1));
+    scene->setLight(light);
+
+    sphere = new Sphere(vec3(0, 0, 0), .1, .7, .2, .1, vec3(.94,.71,.83), vec3(1,1,1), 32);
+    scene->addObj(sphere);
+    sphere = new Sphere(vec3(0,0,-0.25), .2, .6, .3, .1, vec3(.5,.8,.88), vec3(1,1,1), 32);
+    scene->addObj(sphere);
+    sphere = new Sphere(vec3(0,0,-0.35), .3, .5, .4, .1, vec3(.98,.78,.59), vec3(.5,1,.5), 64);
+    scene->addObj(sphere);
+
+    tracer.traceScene(image_width, image_height, scene);
+    delete scene;
+
 }

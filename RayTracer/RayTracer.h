@@ -10,7 +10,6 @@ private:
 public:
     RayTracer() {};
     void traceScene(int imgW, int imgH, Scene* scene);
-
 };
 
 

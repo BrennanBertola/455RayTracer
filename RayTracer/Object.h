@@ -5,16 +5,6 @@
 #include "Ray.h"
 using namespace std;
 
-class IResult {
-public:
-    bool found;
-    vec3 point;
-    vec3 color;
-
-    IResult(bool found) : found(found) {}
-    IResult(bool found, const vec3 &point, const vec3 &color) : found(found), point(point), color(color) {}
-};
-
 class  Object {
 protected:
     float Ks;
@@ -30,8 +20,8 @@ public:
 
     virtual ~Object() {}
 
-    virtual IResult checkForIntersect(Ray ray) = 0;
-
+    virtual pair<bool, vec3> checkForIntersect(Ray ray) = 0;
+    virtual vec3 getNorm(vec3 p) = 0;
 
     float getKs() const {
         return Ks;

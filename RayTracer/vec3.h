@@ -46,6 +46,10 @@ public:
     double length_squared() const {
         return e[0]*e[0] + e[1]*e[1] + e[2]*e[2];
     }
+
+    double distance(vec3 other) {
+        return sqrt(pow(e[0]-other[0],2) + pow(e[1]-other[1], 2) + pow(e[2]-other[2],2));
+    }
 };
 
 inline ostream& operator<<(ostream &out, const vec3 &v) {

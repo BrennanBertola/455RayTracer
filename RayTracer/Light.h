@@ -8,13 +8,14 @@ private:
     vec3 lightColor;
 
 public:
+    Light() {}
     Light(const vec3 &dirToLight, const vec3 &lightColor) : dirToLight(dirToLight), lightColor(lightColor) {}
 
-    const vec3 &getDirToLight() const {
+    const vec3 &getDirection() const {
         return dirToLight;
     }
 
-    const vec3 &getLightColor() const {
+    const vec3 &getColor() const {
         return lightColor;
     }
 };

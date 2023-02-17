@@ -1,6 +1,6 @@
 #include "Sphere.h"
 
-IResult Sphere::checkForIntersect(Ray r) {
+pair<bool, vec3> Sphere::checkForIntersect(Ray r) {
     vec3 oc = r.getOri() - center;
     float a = dot(r.getDir(), r.getDir());
     float b = 2.0 * dot(oc, r.getDir());
@@ -8,26 +8,22 @@ IResult Sphere::checkForIntersect(Ray r) {
     float d = b*b - 4*a*c;
 
     if (d < 0) {
-        return IResult(false);
+        return {false, vec3()};
     }
 
     float t = 0;
-    float t0 = (-b - sqrt(d)) / 2;
+    float t0 = (-b - sqrt(d)) / (2.0 * a);
     if (t0 <= 0) {
-        float t1 = (-b + sqrt(d)) / 2;
+        float t1 = (-b + sqrt(d)) / (2.0 * a);
         if (t1 <= 0) {
-            return IResult(false);
+            return {false, vec3()};
         }
         t = t1;
     }
     else {
         t = t0;
     }
-    return IResult(true, r.getOri() + r.getDir()*t, Od);
-
-
-
-
-
+    return {true, r.getOri() + r.getDir()*t};
 }
+
 

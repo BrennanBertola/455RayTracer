@@ -7,21 +7,28 @@
 #include "Light.h"
 #include "Camera.h"
 #include <vector>
+#include <iostream>
 
 class Scene {
 private:
     vector<Object*> objs;
-    vector<Light> lights;
+    Light light;
     Camera cam;
     vec3 backColor;
     vec3 ambLight;
+    string name;
 public:
-    Scene(const vec3 &backColor, const vec3 &ambLight) : backColor(backColor), ambLight(ambLight) {}
+    Scene(const vec3 &backColor, const vec3 &ambLight, const string &name) : backColor(backColor), ambLight(ambLight), name(name){}
 
     ~Scene() {
         while (!objs.empty()) {
-            delete objs.front();
+            delete objs.back();
+            objs.pop_back();
         }
+    }
+
+    const string &getName() const {
+        return name;
     }
 
     void setCam(const Camera &cam) {
@@ -30,16 +37,17 @@ public:
     void addObj(Object* obj) {
         objs.push_back(obj);
     }
-    void addLight(const Light &light) {
-        lights.push_back(light);
+    void setLight(const Light &light) {
+        this->light = light;
     }
+
 
      vector<Object*> getObjs()  {
         return objs;
     }
 
-    const vector<Light> &getLights() const {
-        return lights;
+    const Light &getLight() const {
+        return light;
     }
 
     const Camera &getCam() const {
