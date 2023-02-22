@@ -4,15 +4,24 @@
 using namespace std;
 
 void writeColor(std::ostream &out, vec3 pixel_color) {
-    // Write the translated [0,255] value of each color component.
     out << static_cast<int>(255.999 * pixel_color.x()) << ' '
         << static_cast<int>(255.999 * pixel_color.y()) << ' '
         << static_cast<int>(255.999 * pixel_color.z()) << '\n';
 }
 
+bool inShadow(vec3 ori, vec3 dir, vec3 norm) {
+    ori += norm * 0.01; //Offset point from surface
+    return false;
+}
+
 vec3 calcColor(Object* obj, vec3 point, Scene* s, Ray r) {
     vec3 norm = unit_vector(obj->getNorm(point));
-    vec3 lNorm = unit_vector(s->getLight().getDirection());
+    vec3 lNorm = unit_vector(s->getLight().getDirection() - point);
+
+    if (inShadow(point, norm, lNorm)) {
+        return vec3(0,0,0);
+    }
+
     vec3 vNorm = unit_vector(r.getDir() * -1);
     vec3 rNorm = 2 * dot(lNorm, norm) * norm - lNorm;
 
