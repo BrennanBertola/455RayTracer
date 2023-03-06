@@ -4,6 +4,7 @@
 #include "Ray.h"
 #include "Object.h"
 #include "Sphere.h"
+#include "Triangle.h"
 #include "Light.h"
 #include "Camera.h"
 #include <vector>

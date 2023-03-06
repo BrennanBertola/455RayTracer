@@ -33,7 +33,7 @@ bool inShadow(vec3 ori, vec3 dir, vec3 norm, Scene* s) {
 
 vec3 RayTracer::calcColor(Object* obj, vec3 point, Scene* s, Ray r) {
     vec3 norm = unit_vector(obj->getNorm(point));
-    vec3 lNorm = unit_vector(s->getLight().getDirection() - point);
+    vec3 lNorm = unit_vector(s->getLight().getDirection());
 
     if (inShadow(point, lNorm, norm, s)) {
         return vec3(0,0,0);
