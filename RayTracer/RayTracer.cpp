@@ -46,9 +46,9 @@ vec3 RayTracer::calcColor(Object* obj, vec3 point, Scene* s, Ray r) {
     vec3 ambient = s->getAmbLight() * obj->getKa() * obj->getOd();
     vec3 specular = obj->getKs() * s->getLight().getColor() * obj->getOs() * pow(max(0.0, dot(vNorm, rNorm)), obj->getKgls());
     vec3 result = diffuse + ambient + specular;
-    result[0] = max(0.0, min(result.x(), 255.0));
-    result[1] = max(0.0, min(result.y(), 255.0));
-    result[2] = max(0.0, min(result.z(), 255.0));
+    result[0] = max(0.0, min(result.x(), 1.0));
+    result[1] = max(0.0, min(result.y(), 1.0));
+    result[2] = max(0.0, min(result.z(), 1.0));
 
     if (obj->getRefl() > 0.0 && rayCount <= maxRays) {
         rayCount++;
