@@ -35,9 +35,9 @@ pair<bool, vec3> Triangle::checkForIntersect(Ray ray) {
     vec3 norm = getNorm(vec3());
 
     //flips the norm to the side that faces the camera
-    if (dot(norm, ray.getDir()) > 0) {
-        norm *= -1;
-    }
+//    if (dot(norm, ray.getDir()) > 0) {
+//        norm *= -1;
+//    }
     if (dot(norm, ray.getDir()) == 0) {
         return {false, vec3()};
     }
