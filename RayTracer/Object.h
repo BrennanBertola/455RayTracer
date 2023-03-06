@@ -13,10 +13,14 @@ protected:
     vec3 Od;
     vec3 Os;
     float kgls;
+    float refl;
 
 public:
-    Object(float kd, float ks, float ka, const vec3 &od, const vec3 &os, float kgls) : Ks(ks), Kd(kd), Ka(ka),
-                                                                                       kgls(kgls), Od(od), Os(os) {}
+    Object(float ks, float kd, float ka, const vec3 &od, const vec3 &os, float kgls, float refl) : Ks(ks), Kd(kd),
+                                                                                                   Ka(ka), Od(od),
+                                                                                                   Os(os), kgls(kgls),
+                                                                                                   refl(refl) {}
+
 
     virtual ~Object() {}
 
@@ -45,6 +49,10 @@ public:
 
     const vec3 &getOs() const {
         return Os;
+    }
+
+    float getRefl() const {
+        return refl;
     }
 };
 #endif //RAYTRACER_OBJECT_H

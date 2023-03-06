@@ -9,16 +9,33 @@ void writeColor(std::ostream &out, vec3 pixel_color) {
         << static_cast<int>(255.999 * pixel_color.z()) << '\n';
 }
 
-bool inShadow(vec3 ori, vec3 dir, vec3 norm) {
-    ori += norm * 0.01; //Offset point from surface
-    return false;
+bool inShadow(vec3 ori, vec3 dir, vec3 norm, Scene* s) {
+    ori += norm * 0.001; //Offset point from surface
+    Ray shadow(ori, dir);
+
+    vector<Object*> objs = s->getObjs();
+    float minD = numeric_limits<float>::infinity();
+    bool noInter = true;
+
+    for (Object* obj : objs) {
+        pair<bool, vec3> result = obj->checkForIntersect(shadow);
+        if (result.first) {
+            int dist = result.second.distance(s->getCam().getLookFrom());
+            if (dist < minD) {
+                noInter = false;
+                minD = dist;
+            }
+        }
+    }
+
+    return !noInter;
 }
 
-vec3 calcColor(Object* obj, vec3 point, Scene* s, Ray r) {
+vec3 RayTracer::calcColor(Object* obj, vec3 point, Scene* s, Ray r) {
     vec3 norm = unit_vector(obj->getNorm(point));
     vec3 lNorm = unit_vector(s->getLight().getDirection() - point);
 
-    if (inShadow(point, norm, lNorm)) {
+    if (inShadow(point, lNorm, norm, s)) {
         return vec3(0,0,0);
     }
 
@@ -28,11 +45,20 @@ vec3 calcColor(Object* obj, vec3 point, Scene* s, Ray r) {
     vec3 diffuse = obj->getKd() * s->getLight().getColor() * obj->getOd() * max(0.0, dot(norm, lNorm));
     vec3 ambient = s->getAmbLight() * obj->getKa() * obj->getOd();
     vec3 specular = obj->getKs() * s->getLight().getColor() * obj->getOs() * pow(max(0.0, dot(vNorm, rNorm)), obj->getKgls());
+    vec3 result = diffuse + ambient + specular;
 
-    return diffuse + ambient + specular;
+    if (obj->getRefl() > 0.0 && rayCount <= maxRays) {
+        rayCount++;
+        vec3 reflectDir = 2 * dot(vNorm, norm)*norm - vNorm;
+        vec3 reflectOri = point + (norm * .001);
+        Ray reflectRay(reflectOri, reflectDir);
+        rayColor(reflectRay, s);
+    }
+
+    return result;
 }
 
-vec3 rayColor(const Ray& r, Scene* s) {
+vec3 RayTracer::rayColor(const Ray& r, Scene* s) {
     vector<Object*> objs = s->getObjs();
     Object* min;
     vec3 minPoint;
@@ -76,6 +102,7 @@ void RayTracer::traceScene(int imgW, int imgH, Scene* scene) {
             float u = double(i) * ((cam.max.first - cam.min.first)/(imgW)) + cam.min.first;
             float v = double(j) * ((cam.max.second - cam.min.second)/(imgH)) + cam.min.second;
             Ray r(cam.getLookFrom(),  u*vec3(1,0,0) + v*vec3(0,1,0) + cam.getLookAt() - cam.getLookFrom());
+            rayCount = 1;
             vec3 pixel_color = rayColor(r, scene);
             writeColor(os, pixel_color);
         }

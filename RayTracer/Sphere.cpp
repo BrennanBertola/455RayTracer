@@ -26,4 +26,7 @@ pair<bool, vec3> Sphere::checkForIntersect(Ray r) {
     return {true, r.getOri() + r.getDir()*t};
 }
 
+Sphere::Sphere(const vec3 &center, float radius, float kd, float ks, float ka, const vec3 &od, const vec3 &os,
+               float kgls, float refl) : Object(ks, kd, ka, od, os, kgls, refl), radius(radius), center(center) {}
+
 
