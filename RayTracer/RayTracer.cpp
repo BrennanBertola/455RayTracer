@@ -10,21 +10,16 @@ void writeColor(std::ostream &out, vec3 pixel_color) {
 }
 
 bool inShadow(vec3 ori, vec3 dir, vec3 norm, Scene* s) {
-    ori += norm * 0.001; //Offset point from surface
+    ori += norm * 0.0001; //Offset point from surface
     Ray shadow(ori, dir);
 
     vector<Object*> objs = s->getObjs();
-    float minD = numeric_limits<float>::infinity();
     bool noInter = true;
 
     for (Object* obj : objs) {
         pair<bool, vec3> result = obj->checkForIntersect(shadow);
         if (result.first) {
-            int dist = result.second.distance(s->getCam().getLookFrom());
-            if (dist < minD) {
-                noInter = false;
-                minD = dist;
-            }
+            noInter = false;
         }
     }
 
@@ -33,9 +28,13 @@ bool inShadow(vec3 ori, vec3 dir, vec3 norm, Scene* s) {
 
 vec3 RayTracer::calcColor(Object* obj, vec3 point, Scene* s, Ray r) {
     vec3 norm = unit_vector(obj->getNorm(point));
+    if (dot(norm, r.getDir()) > 0) {
+        norm *= -1;
+    }
+
     vec3 lNorm = unit_vector(s->getLight().getDirection());
 
-    if (inShadow(point, lNorm, norm, s)) {
+    if (inShadow(point, lNorm, norm, s) && obj->getRefl() == 0) {
         return vec3(0,0,0);
     }
 
@@ -55,7 +54,7 @@ vec3 RayTracer::calcColor(Object* obj, vec3 point, Scene* s, Ray r) {
         vec3 reflectDir = 2 * dot(vNorm, norm)*norm - vNorm;
         vec3 reflectOri = point + (norm * .001);
         Ray reflectRay(reflectOri, reflectDir);
-        rayColor(reflectRay, s);
+        result = (1.0 - obj->getRefl()) * result + obj->getRefl() * rayColor(reflectRay, s);
     }
 
     return result;
@@ -71,7 +70,7 @@ vec3 RayTracer::rayColor(const Ray& r, Scene* s) {
     for (Object* obj : objs) {
         pair<bool, vec3> result = obj->checkForIntersect(r);
         if (result.first) {
-            int dist = result.second.distance(s->getCam().getLookFrom());
+            float dist = result.second.distance(s->getCam().getLookFrom());
             if (dist < minD) {
                 noInter = false;
                 min = obj;

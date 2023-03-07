@@ -19,11 +19,11 @@ int main() {
     Sphere* sphere = new Sphere(vec3(0.0, 0.3, -1.0), .25, 0, .1, .1, vec3(.75,.75,.75), vec3(1,1,1), 10, .9);
     scene->addObj(sphere);
 
-    vector<vec3> tmp = {vec3(0, -.7, -.5), vec3(1, .4, -1), vec3(0,-.71,-1.5)};
+    vector<vec3> tmp = {vec3(0, -.7, -.5), vec3(1, .4, -1), vec3(0,-.7,-1.5)};
     Triangle* triangle = new Triangle(tmp, .9, 1, .1, vec3(0,0,1), vec3(1,1,1), 4, 0);
     scene->addObj(triangle);
 
-    tmp = {vec3(0,-.7,-.5), vec3(0,-.71,-1.5), vec3(-1.,.4, -1.0)};
+    tmp = {vec3(0,-.7,-.5), vec3(0,-.7,-1.5), vec3(-1.,.4, -1.0)};
     triangle = new Triangle(tmp, .9,1,.1, vec3(1,1,0), vec3(1,1,1), 4, 0);
     scene->addObj(triangle);
 
@@ -41,12 +41,12 @@ int main() {
     scene->addObj(sphere);
     sphere = new Sphere(vec3(.3,0,-.1), .08, .8, .8, .1, vec3(1,0,0), vec3(.5,1,.5), 32, 0);
     scene->addObj(sphere);
-    sphere = new Sphere(vec3(-.6,0,0), .3, .7, .2, .1, vec3(0,1,0), vec3(.5,1,.5), 64, 0);
+    sphere = new Sphere(vec3(-.6,0,0), .3, .7, .5, .1, vec3(0,1,0), vec3(.5,1,.5), 64, 0);
     scene->addObj(sphere);
-    sphere = new Sphere(vec3(.1,-.55,.25),.3,0,.1,.1, vec3(.75,.75,.75), vec3(1,1,1), 32, 0);
+    sphere = new Sphere(vec3(.1,-.55,.25),.3,0,.1,.1, vec3(.75,.75,.75), vec3(1,1,1), 10, 0.9);
     scene->addObj(sphere);
 
-    tmp = {vec3(.31,-.3,-.4), vec3(.0,.3,-.1), vec3(-.3,-.3,.2)};
+    tmp = {vec3(.3,-.3,-.4), vec3(.0,.3,-.1), vec3(-.3,-.3,.2)};
     triangle = new Triangle(tmp, .9,.9,.1, vec3(0,0,1), vec3(1,1,1), 32, 0);
     scene->addObj(triangle);
     tmp = {vec3(-.2,.1,.1), vec3(-.2,-.5,.2), vec3(-.2,.1,-.3)};
@@ -56,38 +56,29 @@ int main() {
     tracer.traceScene(image_width, image_height, scene);
     delete scene;
 
-//    scene = new Scene (vec3(.2,.2,.2), vec3(.1,0.1,0.1), "2Old");
-//    scene->setCam(cam);
-//
-//    light = Light(vec3(1,1,1), vec3(1,1,1));
-//    scene->setLight(light);
-//
-//    sphere = new Sphere(vec3(.45, 0, -0.15), .15, .8, .1, .1, vec3(1,1,1), vec3(1,1,1), 4, 0);
-//    scene->addObj(sphere);
-//    sphere = new Sphere(vec3(0,0,-0.1), .2, .6, .3, .1, vec3(1,0,0), vec3(1,1,1), 32, 0);
-//    scene->addObj(sphere);
-//    sphere = new Sphere(vec3(-0.6,0,0), .3, .6, .2, .1, vec3(0,1,0), vec3(.5,1,.5), 64, 0);
-//    scene->addObj(sphere);
-//    sphere = new Sphere(vec3(0, -10000.5, 0), 10000, .9, 0, .1, vec3(0,0,1), vec3(1,1,1), 16, 0);
-//    scene->addObj(sphere);
-//
-//    tracer.traceScene(image_width, image_height, scene);
-//    delete scene;
-//
-//    scene = new Scene (vec3(.2,.2,.7), vec3(.5,.5,0.5), "3Old");
-//    scene->setCam(cam);
-//
-//    light = Light(vec3(0,1,1), vec3(1,1,1));
-//    scene->setLight(light);
-//
-//    sphere = new Sphere(vec3(0, 0, 0), .1, .7, .2, .1, vec3(.94,.71,.83), vec3(1,1,1), 32, 0);
-//    scene->addObj(sphere);
-//    sphere = new Sphere(vec3(0,0,-0.25), .2, .6, .3, .1, vec3(.5,.8,.88), vec3(1,1,1), 32, 0);
-//    scene->addObj(sphere);
-//    sphere = new Sphere(vec3(0,0,-0.35), .3, .5, .4, .1, vec3(.98,.78,.59), vec3(.5,1,.5), 64, 0);
-//    scene->addObj(sphere);
-//
-//    tracer.traceScene(image_width, image_height, scene);
-//    delete scene;
+    scene = new Scene(vec3(.2,.2,.2), vec3(.1,.1,.1), "3");
+    scene->setCam(cam);
+
+    light = Light(vec3(0,0 ,1), vec3(1,1,1));
+    scene->setLight(light);
+
+
+    tmp = {vec3(-.2, -.2, .2), vec3(.2,-.2, -.2), vec3(0, .2, 0)};
+    triangle = new Triangle(tmp, .9,.9,.1, vec3(0.137,0.431,0.588), vec3(1,1,1), 32, 0);
+    scene->addObj(triangle);
+    tmp = {vec3(.2, .2, .2), vec3(-.2,.2, -.2), vec3(0, -.2, 0)};
+    triangle = new Triangle(tmp, .9,.5,.1, vec3(0.952,0.529,0.184), vec3(1,1,1), 4, 0);
+    scene->addObj(triangle);
+
+
+    sphere = new Sphere(vec3(0.0, 0, 0), .075, 0, .1, .1, vec3(1,1,1), vec3(1,1,1), 10, .9);
+    scene->addObj(sphere);
+    sphere = new Sphere(vec3(0.0, .25, 0), .075, 0, .1, .1, vec3(1,1,1), vec3(1,1,1), 10, .9);
+    scene->addObj(sphere);
+    sphere = new Sphere(vec3(0.0, -.25, 0), .075, 0, .1, .1, vec3(1,1,1), vec3(1,1,1), 10, .9);
+    scene->addObj(sphere);
+
+    tracer.traceScene(image_width, image_height, scene);
+    delete scene;
 
 }

@@ -35,9 +35,9 @@ pair<bool, vec3> Triangle::checkForIntersect(Ray ray) {
     vec3 norm = getNorm(vec3());
 
     //flips the norm to the side that faces the camera
-//    if (dot(norm, ray.getDir()) > 0) {
-//        norm *= -1;
-//    }
+    if (dot(norm, ray.getDir()) > 0) {
+        norm *= -1;
+    }
     if (dot(norm, ray.getDir()) == 0) {
         return {false, vec3()};
     }
@@ -50,7 +50,7 @@ pair<bool, vec3> Triangle::checkForIntersect(Ray ray) {
     }
 
     vec3 p = ray.at(t);
-    string dropAxis = magnitude(p);
+    string dropAxis = magnitude(norm);
     pair <float, float> newP = dropPointAxis(p, dropAxis);
 
     vector<pair<float, float>> projected;
@@ -64,7 +64,7 @@ pair<bool, vec3> Triangle::checkForIntersect(Ray ray) {
     if (projected[0].second < 0){sign = -1;}
     for (int i = 0; i < projected.size(); ++i) {
         int nextIdx = i+1;
-        if (i+1 >= projected.size()) {nextIdx = 0;}
+        if (i+1 == projected.size()) {nextIdx = 0;}
         auto curr = projected[i];
         auto next = projected[nextIdx];
 
